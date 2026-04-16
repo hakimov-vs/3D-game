@@ -9,24 +9,50 @@ var lvl_one_map = [
     { name: "hinter wall", height: 200, width: 200, posX: 0, posY: 0, posZ: 100, rotX: 0, rotY: 0, rotZ: 0, color: "yellow", opacity: 0.3 },
 ];
 
-for (let i = 0; i < lvl_one_map.length; i++) {
-    var mySquare = document.createElement("div");
-    mySquare.id = lvl_one_map[i].name;
-    mySquare.style.position = "absolute";
-    mySquare.style.height = `${lvl_one_map[i].height}px`;
-    mySquare.style.width = `${lvl_one_map[i].width}px`;
-    mySquare.style.backgroundColor = lvl_one_map[i].color;
-    mySquare.style.opacity = lvl_one_map[i].opacity;
-    mySquare.style.transform = `
-    translate3d(
-        ${lvl_one_map[i].posX + myWorld.clientWidth / 2 - lvl_one_map[i].width / 2}px, 
-        ${lvl_one_map[i].posY + myWorld.clientHeight / 2 - lvl_one_map[i].height / 2}px, 
-        ${lvl_one_map[i].posZ}px
-    ) 
-    RotateX(${lvl_one_map[i].rotX}deg) 
-    RotateY(${lvl_one_map[i].rotY}deg) 
-    RotateZ(${lvl_one_map[i].rotZ}deg)
-    `;
-    myWorld.appendChild(mySquare);
+function createWorld(map) {
+    for (let i = 0; i < map.length; i++) {
+        var mySquare = document.createElement("div");
+        mySquare.id = map[i].name;
+        mySquare.style.position = "absolute";
+        mySquare.style.height = `${map[i].height}px`;
+        mySquare.style.width = `${map[i].width}px`;
+        mySquare.style.backgroundColor = map[i].color;
+        mySquare.style.opacity = map[i].opacity;
+        mySquare.style.transform = `
+            translate3d(
+                ${map[i].posX + myWorld.clientWidth / 2 - map[i].width / 2}px, 
+                ${map[i].posY + myWorld.clientHeight / 2 - map[i].height / 2}px, 
+                ${map[i].posZ}px
+            ) 
+            RotateX(${map[i].rotX}deg) 
+            RotateY(${map[i].rotY}deg) 
+            RotateZ(${map[i].rotZ}deg)
+        `;
+        myWorld.appendChild(mySquare);
+    }
 }
 
+createWorld(lvl_one_map);
+
+let dz = 0;
+let vel = 0;
+
+document.addEventListener("keydown", (e) => {
+    if (e.code == "KeyW") {
+        vel = 10;
+    }
+    if (e.code == "KeyS") {
+        vel = -10;
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    vel = 0;
+});
+
+function update() {
+    myWorld.style.transform = `translate3d(${0}px, ${0}px, ${dz}px)`;
+    dz += vel;
+}
+
+var game = setInterval(update, 100);
