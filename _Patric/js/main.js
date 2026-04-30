@@ -34,20 +34,24 @@ function createWorld(map) {
 
 createWorld(lvl_one_map);   
 
-let dx = dz = 0;
+let dx = dz = dry = 0;
 let pressUp = pressDown = pressLeft = pressRight = 0;
-let vel = 0;
+let mouseX = mouseY = 0;
+let vel = 10;
 
-function player(x, y, z, vx, vy, vz) {
+function player(x, y, z, rx, ry, rz, vx, vy, vz) {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.rx = rx;
+    this.ry = ry;
+    this.rz = rz;
     this.vx = vx;
     this.vy = vy;
     this.vz = vz;
 }
 
-let pawn = new player(0, 0, 0, 10, 10, 10);
+let pawn = new player(0, 0, 0, vel, vel, vel);
 
 document.addEventListener("keydown", (e) => {
     if (e.code == "KeyW") {
@@ -79,14 +83,23 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
+document.addEventListener("mousemove", (e) => {
+    mouseX = e.movementX;
+    mouseY = e.movementY;
+});
+
 function update() {
     dz = pressUp - pressDown;
     dx = pressLeft - pressRight;
 
+    dry = mouseX;
+    mouseX = 0;
+
     pawn.z += dz;
     pawn.x += dx;
+    pawn.ry += dry;
 
-    myWorld.style.transform = `translate3d(${-pawn.x}px, ${pawn.y}px, ${600 + pawn.z}px)`;
+    myWorld.style.transform = `translate3d(${-pawn.x}px, ${pawn.y}px, ${600 + pawn.z}px) RotateY(${pawn.ry}deg)`;
 }
 
 var game = setInterval(update, 10);
