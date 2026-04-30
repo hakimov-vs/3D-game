@@ -51,7 +51,7 @@ function player(x, y, z, rx, ry, rz, vx, vy, vz) {
     this.vz = vz;
 }
 
-let pawn = new player(0, 0, 0, vel, vel, vel);
+let pawn = new player(0, 0, 0, 0, 0, 0, vel, vel, vel);
 
 document.addEventListener("keydown", (e) => {
     if (e.code == "KeyW") {
