@@ -1,3 +1,4 @@
+const DEG = Math.PI / 180;
 var myWorld = document.getElementById("world");
 
 var lvl_one_map = [
@@ -89,8 +90,11 @@ document.addEventListener("mousemove", (e) => {
 });
 
 function update() {
-    dz = pressUp - pressDown;
-    dx = pressLeft - pressRight;
+    // dz = pressUp - pressDown;
+    // dx = pressLeft - pressRight;
+
+    dx = (pressLeft - pressRight)*Math.cos(pawn.ry * DEG) + (pressUp - pressDown)*Math.sin(pawn.ry * DEG);
+    dz = -(pressLeft - pressRight)*Math.sin(pawn.ry * DEG) + (pressUp - pressDown)*Math.cos(pawn.ry * DEG);
 
     dry = mouseX;
     drx = mouseY;
