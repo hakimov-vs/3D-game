@@ -93,13 +93,15 @@ function update() {
     dx = pressLeft - pressRight;
 
     dry = mouseX;
-    mouseX = 0;
+    drx = mouseY;
+    mouseX = mouseY = 0;
 
     pawn.z += dz;
     pawn.x += dx;
     pawn.ry += dry;
+    pawn.rx -= drx;
 
-    myWorld.style.transform = `translate3d(${-pawn.x}px, ${pawn.y}px, ${600 + pawn.z}px) RotateY(${pawn.ry}deg)`;
+    myWorld.style.transform = `translateZ(600px) RotateX(${pawn.rx}deg) RotateY(${pawn.ry}deg)translate3d(${-pawn.x}px, ${pawn.y}px, ${pawn.z}px) `;
 }
 
 var game = setInterval(update, 10);
