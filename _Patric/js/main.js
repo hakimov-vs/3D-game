@@ -1,12 +1,12 @@
 var myWorld = document.getElementById("world");
 
 var lvl_one_map = [
-    { name: "floor", height: 200, width: 200, posX: 0, posY: 100, posZ: 0, rotX: 90, rotY: 0, rotZ: 0, color: "violet", opacity: 0.3 },
-    { name: "ceiling", height: 200, width: 200, posX: 0, posY: -100, posZ: 0, rotX: 90, rotY: 0, rotZ: 0, color: "green", opacity: 0.3 },
-    { name: "right wall", height: 200, width: 200, posX: 100, posY: 0, posZ: 0, rotX: 0, rotY: 90, rotZ: 0, color: "blue", opacity: 0.3 },
-    { name: "left wall", height: 200, width: 200, posX: -100, posY: 0, posZ: 0, rotX: 0, rotY: 90, rotZ: 0, color: "orange", opacity: 0.3 },
-    { name: "front wall", height: 200, width: 200, posX: 0, posY: 0, posZ: 100, rotX: 0, rotY: 0, rotZ: 0, color: "#ecc0d1", opacity: 0.3 },
-    { name: "hinter wall", height: 200, width: 200, posX: 0, posY: 0, posZ: 100, rotX: 0, rotY: 0, rotZ: 0, color: "yellow", opacity: 0.3 },
+    { name: "floor", height: 2000, width: 2000, posX: 0, posY: 100, posZ: 0, rotX: 90, rotY: 0, rotZ: 0, color: "violet", opacity: 0.3 },
+    { name: "ceiling", height: 2000, width: 2000, posX: 0, posY: -100, posZ: 0, rotX: 90, rotY: 0, rotZ: 0, color: "green", opacity: 0.3 },
+    { name: "right wall", height: 200, width: 2000, posX: 1000, posY: 0, posZ: 0, rotX: 0, rotY: 90, rotZ: 0, color: "blue", opacity: 0.3 },
+    { name: "left wall", height: 200, width: 2000, posX: -1000, posY: 0, posZ: 0, rotX: 0, rotY: 90, rotZ: 0, color: "orange", opacity: 0.3 },
+    { name: "front wall", height: 200, width: 2000, posX: 0, posY: 0, posZ: 1000, rotX: 0, rotY: 0, rotZ: 0, color: "#ecc0d1", opacity: 0.3 },
+    { name: "hinter wall", height: 200, width: 2000, posX: 0, posY: 0, posZ: 1000, rotX: 0, rotY: 0, rotZ: 0, color: "yellow", opacity: 0.3 },
 ];
 
 function createWorld(map) {
@@ -35,6 +35,7 @@ function createWorld(map) {
 createWorld(lvl_one_map);   
 
 let dx = dz = 0;
+let pressUp = pressDown = pressLeft = pressRight = 0;
 let vel = 0;
 
 function player(x, y, z, vx, vy, vz) {
@@ -46,43 +47,46 @@ function player(x, y, z, vx, vy, vz) {
     this.vz = vz;
 }
 
-let pawn = new player(0, 0, 0, 0, 0, 0);
+let pawn = new player(0, 0, 0, 10, 10, 10);
 
 document.addEventListener("keydown", (e) => {
     if (e.code == "KeyW") {
-        pawn.vz = 10;
+        pressUp = pawn.vz;
     }
     if (e.code == "KeyS") {
-        pawn.vz = -10;
+        pressDown = pawn.vz;
     }
     if (e.code == "KeyD") {
-        pawn.vx = 10;
+        pressLeft = pawn.vx;
     }
     if (e.code == "KeyA") {
-        pawn.vx = -10;
+        pressRight = pawn.vx;
     }
 });
 
 document.addEventListener("keyup", (e) => {
     if (e.code == "KeyW") {
-        pawn.vz = 0;
+        pressUp = 0;
     }
     if (e.code == "KeyS") {
-        pawn.vz = 0;
+        pressDown = 0;
     }
         if (e.code == "KeyD") {
-        pawn.vx = 0;
+        pressLeft = 0;
     }
     if (e.code == "KeyA") {
-        pawn.vx = 0;
+        pressRight = 0;
     }
 });
 
 function update() {
-    dx += pawn.vx;
-    dz += pawn.vz;
+    dz = pressUp - pressDown;
+    dx = pressLeft - pressRight;
 
-    myWorld.style.transform = `translate3d(${pawn.x - dx}px, ${pawn.y}px, ${pawn.z + dz}px)`;
+    pawn.z += dz;
+    pawn.x += dx;
+
+    myWorld.style.transform = `translate3d(${-pawn.x}px, ${pawn.y}px, ${600 + pawn.z}px)`;
 }
 
 var game = setInterval(update, 10);
