@@ -32,27 +32,57 @@ function createWorld(map) {
     }
 }
 
-createWorld(lvl_one_map);
+createWorld(lvl_one_map);   
 
-let dz = 0;
+let dx = dz = 0;
 let vel = 0;
+
+function player(x, y, z, vx, vy, vz) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.vx = vx;
+    this.vy = vy;
+    this.vz = vz;
+}
+
+let pawn = new player(0, 0, 0, 0, 0, 0);
 
 document.addEventListener("keydown", (e) => {
     if (e.code == "KeyW") {
-        vel = 10;
+        pawn.vz = 10;
     }
     if (e.code == "KeyS") {
-        vel = -10;
+        pawn.vz = -10;
+    }
+    if (e.code == "KeyD") {
+        pawn.vx = 10;
+    }
+    if (e.code == "KeyA") {
+        pawn.vx = -10;
     }
 });
 
 document.addEventListener("keyup", (e) => {
-    vel = 0;
+    if (e.code == "KeyW") {
+        pawn.vz = 0;
+    }
+    if (e.code == "KeyS") {
+        pawn.vz = 0;
+    }
+        if (e.code == "KeyD") {
+        pawn.vx = 0;
+    }
+    if (e.code == "KeyA") {
+        pawn.vx = 0;
+    }
 });
 
 function update() {
-    myWorld.style.transform = `translate3d(${0}px, ${0}px, ${dz}px)`;
-    dz += vel;
+    dx += pawn.vx;
+    dz += pawn.vz;
+
+    myWorld.style.transform = `translate3d(${pawn.x - dx}px, ${pawn.y}px, ${pawn.z + dz}px)`;
 }
 
-var game = setInterval(update, 100);
+var game = setInterval(update, 10);
